@@ -1,0 +1,646 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>harmoniQ — An AI That Learns Your Body</title>
+<meta name="description" content="harmoniQ trains a personal ML model on your Apple Watch data — entirely on your iPhone. 12 health scores, wellness monitoring, and your biological Health Age. Free. No subscriptions.">
+<meta property="og:title" content="harmoniQ — An AI That Learns Your Body">
+<meta property="og:description" content="Your Apple Watch collects incredible health data. harmoniQ makes it useful — with on-device AI that adapts to your body. Free forever.">
+<meta property="og:type" content="website">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" type="image/png" href="images/app-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+  :root {
+    --bg: #000000;
+    --surface: #1A1A1E;
+    --surface-elevated: #242428;
+    --accent: #1A3BD4;
+    --accent-light: #5B7FFF;
+    --accent-warm: #FF375F;
+    --accent-green: #92E628;
+    --accent-blue: #5DADE2;
+    --text-primary: #FFFFFF;
+    --text-secondary: #EBEBF0;
+    --text-tertiary: #8E8E93;
+    --border: rgba(255,255,255,0.06);
+    --border-hover: rgba(255,255,255,0.12);
+    --glass: rgba(0,0,0,0.85);
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    background: var(--bg);
+    color: var(--text-primary);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    overflow-x: hidden;
+  }
+
+  /* ═══ NAV ═══ */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    background: var(--glass);
+    backdrop-filter: blur(24px);
+    -webkit-backdrop-filter: blur(24px);
+    border-bottom: 1px solid var(--border);
+    padding: 0 48px;
+    height: 64px;
+    display: flex; align-items: center; justify-content: space-between;
+  }
+  .nav-logo {
+    display: flex; align-items: center; gap: 10px;
+    font-weight: 700; font-size: 20px; letter-spacing: -0.5px;
+    text-decoration: none; color: var(--text-primary);
+  }
+  .nav-logo img {
+    width: 34px; height: 34px; border-radius: 8px;
+  }
+  .nav-links { display: flex; align-items: center; gap: 32px; }
+  .nav-links a {
+    color: var(--text-tertiary); text-decoration: none;
+    font-size: 14px; font-weight: 500;
+    transition: color 0.2s;
+  }
+  .nav-links a:hover { color: var(--text-primary); }
+  .btn-primary {
+    display: inline-flex; align-items: center; gap: 8px;
+    background: var(--accent); color: #fff;
+    padding: 10px 22px; border-radius: 100px;
+    font-size: 14px; font-weight: 600;
+    text-decoration: none; border: none; cursor: pointer;
+    transition: transform 0.2s, opacity 0.2s;
+  }
+  .btn-primary:hover { transform: scale(1.03); opacity: 0.92; }
+  .btn-appstore {
+    background: #fff; color: #000;
+    padding: 14px 32px; font-size: 15px;
+  }
+  .btn-appstore svg { width: 22px; height: 22px; flex-shrink: 0; }
+
+  /* ═══ HERO ═══ */
+  .hero {
+    padding: 160px 48px 60px;
+    text-align: center;
+    max-width: 900px;
+    margin: 0 auto;
+  }
+  .hero-badge {
+    display: inline-block;
+    background: rgba(26,59,212,0.12);
+    color: var(--accent-light);
+    font-size: 12px; font-weight: 600;
+    letter-spacing: 1.5px; text-transform: uppercase;
+    padding: 8px 20px; border-radius: 100px;
+    margin-bottom: 32px;
+    border: 1px solid rgba(26,59,212,0.2);
+  }
+  .hero h1 {
+    font-size: clamp(40px, 6vw, 72px);
+    font-weight: 900; line-height: 1.02;
+    letter-spacing: -3px; margin-bottom: 24px;
+  }
+  .hero h1 em {
+    font-style: normal;
+    background: linear-gradient(135deg, #1A3BD4 0%, #5DADE2 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  .hero-sub {
+    color: var(--text-tertiary); font-size: 18px; line-height: 1.7;
+    max-width: 540px; margin: 0 auto 40px;
+  }
+  .hero-micro {
+    color: var(--text-tertiary); font-size: 13px; margin-top: 16px;
+    letter-spacing: 0.3px;
+  }
+
+  /* ═══ SCREENSHOTS HERO ═══ */
+  .screenshots-hero {
+    display: flex; justify-content: center; gap: 20px;
+    padding: 60px 24px 80px;
+    max-width: 1000px; margin: 0 auto;
+  }
+  .phone-frame {
+    width: 220px; flex-shrink: 0;
+    border-radius: 28px;
+    overflow: hidden;
+    border: 2px solid rgba(255,255,255,0.08);
+    box-shadow: 0 24px 80px rgba(0,0,0,0.6);
+    transition: transform 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  }
+  .phone-frame:nth-child(2) { transform: translateY(-24px); }
+  .phone-frame:hover { transform: translateY(-12px); }
+  .phone-frame:nth-child(2):hover { transform: translateY(-36px); }
+  .phone-frame img { width: 100%; display: block; }
+
+  /* ═══ COMPARISON ═══ */
+  .comparison {
+    padding: 80px 48px;
+    text-align: center;
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+    background: linear-gradient(180deg, rgba(26,59,212,0.03) 0%, transparent 100%);
+  }
+  .comparison h2 {
+    font-size: clamp(22px, 3vw, 32px);
+    font-weight: 700; letter-spacing: -0.5px;
+    margin-bottom: 48px;
+  }
+  .comparison-grid {
+    display: flex; justify-content: center; gap: 64px;
+    max-width: 700px; margin: 0 auto;
+  }
+  .comp-item { text-align: center; }
+  .comp-price {
+    font-size: 52px; font-weight: 900; letter-spacing: -3px;
+    margin-bottom: 4px; line-height: 1;
+  }
+  .comp-price small { font-size: 22px; font-weight: 600; letter-spacing: 0; }
+  .comp-label { font-size: 15px; font-weight: 600; margin-bottom: 4px; }
+  .comp-detail { font-size: 13px; color: var(--text-tertiary); }
+  .comp-active .comp-price { color: var(--accent); }
+  .comp-active .comp-label { color: var(--text-primary); }
+  .comp-inactive { opacity: 0.35; }
+  .comp-inactive .comp-label { color: var(--text-tertiary); }
+
+  /* ═══ SECTION HEADER ═══ */
+  .section-header {
+    text-align: center;
+    padding: 120px 48px 56px;
+  }
+  .section-header h2 {
+    font-size: clamp(32px, 5vw, 52px);
+    font-weight: 900; letter-spacing: -2px;
+    line-height: 1.05; margin-bottom: 16px;
+  }
+  .section-header p {
+    color: var(--text-tertiary); font-size: 18px; line-height: 1.6;
+    max-width: 500px; margin: 0 auto;
+  }
+
+  /* ═══ FEATURES ═══ */
+  .features-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 0 48px 120px;
+  }
+  .feature-card {
+    background: var(--surface);
+    border-radius: 24px;
+    border: 1px solid var(--border);
+    overflow: hidden;
+    transition: border-color 0.3s, transform 0.3s;
+  }
+  .feature-card:hover {
+    border-color: var(--border-hover);
+    transform: translateY(-4px);
+  }
+  .feature-card-img {
+    height: 320px;
+    overflow: hidden;
+    display: flex; align-items: center; justify-content: center;
+    background: #0D0D0F;
+  }
+  .feature-card-img img {
+    height: 100%; width: auto;
+    object-fit: contain;
+  }
+  .feature-card-body { padding: 24px 24px 28px; }
+  .feature-card-body h3 {
+    font-size: 18px; font-weight: 700; margin-bottom: 8px;
+    letter-spacing: -0.3px;
+  }
+  .feature-card-body p {
+    font-size: 14px; color: var(--text-tertiary); line-height: 1.6;
+  }
+
+  /* ═══ HOW IT WORKS ═══ */
+  .how-section {
+    padding: 0 48px 120px;
+    max-width: 1000px; margin: 0 auto;
+  }
+  .steps {
+    display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px;
+  }
+  .step {
+    text-align: center; padding: 48px 28px;
+    background: var(--surface);
+    border-radius: 24px;
+    border: 1px solid var(--border);
+    transition: border-color 0.3s;
+  }
+  .step:hover { border-color: var(--border-hover); }
+  .step-num {
+    width: 56px; height: 56px;
+    background: rgba(26,59,212,0.12);
+    color: var(--accent-light);
+    border-radius: 16px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 22px; font-weight: 800;
+    margin: 0 auto 24px;
+    border: 1px solid rgba(26,59,212,0.2);
+  }
+  .step h3 { font-size: 18px; font-weight: 700; margin-bottom: 12px; }
+  .step p { font-size: 14px; color: var(--text-tertiary); line-height: 1.6; }
+
+  /* ═══ PRIVACY ═══ */
+  .privacy {
+    padding: 120px 48px;
+    text-align: center;
+    background: #0A0A0C;
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+  }
+  .privacy h2 {
+    font-size: clamp(32px, 5vw, 52px);
+    font-weight: 900; letter-spacing: -2px;
+    line-height: 1.05; margin-bottom: 20px;
+  }
+  .privacy > p {
+    color: var(--text-tertiary); font-size: 16px; line-height: 1.7;
+    max-width: 540px; margin: 0 auto 56px;
+  }
+  .privacy-cards {
+    display: flex; justify-content: center; gap: 16px;
+    max-width: 900px; margin: 0 auto;
+  }
+  .privacy-card {
+    flex: 1; text-align: center;
+    padding: 36px 24px;
+    background: rgba(255,255,255,0.02);
+    border-radius: 20px;
+    border: 1px solid var(--border);
+    transition: border-color 0.3s;
+  }
+  .privacy-card:hover { border-color: var(--border-hover); }
+  .privacy-icon {
+    width: 52px; height: 52px;
+    background: rgba(26,59,212,0.1);
+    border-radius: 14px;
+    display: flex; align-items: center; justify-content: center;
+    margin: 0 auto 18px;
+    font-size: 24px;
+  }
+  .privacy-card h4 { font-size: 16px; font-weight: 700; margin-bottom: 8px; }
+  .privacy-card p { font-size: 13px; color: var(--text-tertiary); line-height: 1.6; }
+
+  /* ═══ FEDERATED ═══ */
+  .federated {
+    padding: 120px 48px;
+    max-width: 900px; margin: 0 auto;
+    text-align: center;
+  }
+  .federated h2 {
+    font-size: clamp(28px, 4vw, 40px);
+    font-weight: 900; letter-spacing: -1px;
+    line-height: 1.1; margin-bottom: 16px;
+  }
+  .federated > p {
+    color: var(--text-tertiary); font-size: 16px;
+    max-width: 480px; margin: 0 auto 56px; line-height: 1.6;
+  }
+  .flow {
+    display: flex; align-items: center; justify-content: center;
+    gap: 12px; flex-wrap: wrap;
+  }
+  .flow-node {
+    padding: 14px 22px;
+    background: var(--surface);
+    border-radius: 14px;
+    border: 1px solid var(--border);
+    font-size: 14px; font-weight: 600;
+  }
+  .flow-node.hl {
+    background: rgba(26,59,212,0.1);
+    border-color: rgba(26,59,212,0.25);
+    color: var(--accent-light);
+  }
+  .flow-arrow {
+    color: #3A3A3C; font-size: 18px; font-weight: 300;
+  }
+
+  /* ═══ FINAL CTA ═══ */
+  .final-cta {
+    padding: 140px 48px;
+    text-align: center;
+  }
+  .final-cta h2 {
+    font-size: clamp(32px, 5vw, 52px);
+    font-weight: 900; letter-spacing: -2px;
+    line-height: 1.05; margin-bottom: 16px;
+  }
+  .final-cta p {
+    color: var(--text-tertiary); font-size: 16px;
+    margin-bottom: 40px;
+  }
+
+  /* ═══ FOOTER ═══ */
+  footer {
+    padding: 40px 48px;
+    border-top: 1px solid var(--border);
+    display: flex; justify-content: space-between; align-items: center;
+    max-width: 1200px; margin: 0 auto;
+  }
+  .footer-left {
+    color: #3A3A3C; font-size: 13px;
+  }
+  .footer-links { display: flex; gap: 24px; }
+  .footer-links a {
+    color: var(--text-tertiary); text-decoration: none; font-size: 13px;
+    transition: color 0.2s;
+  }
+  .footer-links a:hover { color: var(--text-primary); }
+
+  /* ═══ SCROLL ANIMATIONS ═══ */
+  .reveal {
+    opacity: 0; transform: translateY(32px);
+    transition: opacity 0.7s cubic-bezier(0.25, 0.46, 0.45, 0.94),
+                transform 0.7s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  }
+  .reveal.visible { opacity: 1; transform: translateY(0); }
+
+  /* ═══ RESPONSIVE ═══ */
+  @media (max-width: 900px) {
+    nav { padding: 0 24px; }
+    .nav-links a:not(.btn-primary) { display: none; }
+    .hero { padding: 130px 24px 40px; }
+    .hero h1 { letter-spacing: -2px; }
+    .screenshots-hero { gap: 12px; padding: 40px 16px 60px; }
+    .phone-frame { width: 160px; border-radius: 20px; }
+    .comparison { padding: 60px 24px; }
+    .comparison-grid { gap: 32px; }
+    .comp-price { font-size: 40px; }
+    .section-header { padding: 80px 24px 40px; }
+    .features-grid {
+      grid-template-columns: 1fr;
+      padding: 0 24px 80px;
+    }
+    .feature-card-img { height: 360px; }
+    .feature-card-img img { width: 60%; height: auto; }
+    .how-section { padding: 0 24px 80px; }
+    .steps { grid-template-columns: 1fr; }
+    .privacy { padding: 80px 24px; }
+    .privacy-cards { flex-direction: column; max-width: 400px; }
+    .federated { padding: 80px 24px; }
+    .flow { gap: 8px; }
+    .flow-node { font-size: 12px; padding: 10px 14px; }
+    .final-cta { padding: 100px 24px; }
+    footer { padding: 32px 24px; flex-direction: column; gap: 16px; text-align: center; }
+  }
+
+  @media (max-width: 600px) {
+    .screenshots-hero { gap: 8px; }
+    .phone-frame { width: 120px; border-radius: 16px; }
+    .comparison-grid { flex-direction: column; gap: 24px; }
+    .hero-sub { font-size: 16px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a href="#" class="nav-logo">
+    <img src="images/app-icon.png" alt="harmoniQ icon">
+    harmoniQ
+  </a>
+  <div class="nav-links">
+    <a href="#features">Features</a>
+    <a href="#how">How It Works</a>
+    <a href="#privacy">Privacy</a>
+    <a href="https://apps.apple.com/us/app/harmoniq-health-monitor/id6761321112" class="btn-primary">Download</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-badge">On-Device AI &bull; Free Forever &bull; No Ads</div>
+  <h1>An AI that learns<br><em>your body.</em></h1>
+  <p class="hero-sub">harmoniQ trains a personal machine learning model on your Apple Watch data — entirely on your iPhone. Your health data never leaves your device.</p>
+  <a href="https://apps.apple.com/us/app/harmoniq-health-monitor/id6761321112" class="btn-primary btn-appstore">
+    <svg viewBox="0 0 24 24" fill="currentColor"><path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.8-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/></svg>
+    Download on the App Store
+  </a>
+  <p class="hero-micro">Free. No subscriptions. No data collection.</p>
+</section>
+
+<!-- HERO SCREENSHOTS -->
+<section class="screenshots-hero reveal">
+  <div class="phone-frame">
+    <img src="images/01-Health-Age-Dashboard.png" alt="Health Age Dashboard showing biological age of 24 years 8 months">
+  </div>
+  <div class="phone-frame">
+    <img src="images/04-Trends-ML-Models.png" alt="Personal ML model and health trends">
+  </div>
+  <div class="phone-frame">
+    <img src="images/03-Wellness-Monitor.png" alt="Wellness Monitor with sleep architecture and blood oxygen">
+  </div>
+</section>
+
+<!-- COMPARISON -->
+<section class="comparison reveal">
+  <h2>You don't need another device. Or another subscription.</h2>
+  <div class="comparison-grid">
+    <div class="comp-item comp-active">
+      <div class="comp-price">$0</div>
+      <div class="comp-label">harmoniQ</div>
+      <div class="comp-detail">Free forever. Uses your Apple Watch.</div>
+    </div>
+    <div class="comp-item comp-inactive">
+      <div class="comp-price">$300<small>/yr</small></div>
+      <div class="comp-label">Whoop</div>
+      <div class="comp-detail">Plus a separate wearable.</div>
+    </div>
+    <div class="comp-item comp-inactive">
+      <div class="comp-price">$72<small>/yr</small></div>
+      <div class="comp-label">Oura</div>
+      <div class="comp-detail">Plus a $300 ring.</div>
+    </div>
+  </div>
+</section>
+
+<!-- FEATURES -->
+<section id="features">
+  <div class="section-header reveal">
+    <h2>Everything your watch<br>already tracks. Finally useful.</h2>
+    <p>12 health dimensions from your Apple Watch, powered by on-device machine learning.</p>
+  </div>
+  <div class="features-grid">
+    <div class="feature-card reveal">
+      <div class="feature-card-img">
+        <img src="images/01-Health-Age-Dashboard.png" alt="Health Age">
+      </div>
+      <div class="feature-card-body">
+        <h3>Health Age</h3>
+        <p>Your biological age calculated from the Gompertz hazard model. See exactly what's aging you — and what's keeping you young.</p>
+      </div>
+    </div>
+    <div class="feature-card reveal">
+      <div class="feature-card-img">
+        <img src="images/02-Feature-Cards.png" alt="Health Scores">
+      </div>
+      <div class="feature-card-body">
+        <h3>12 Health Scores</h3>
+        <p>Sleep, recovery, strain, stress, energy, circadian alignment, gait, cardio fitness, blood oxygen, and more — all at a glance.</p>
+      </div>
+    </div>
+    <div class="feature-card reveal">
+      <div class="feature-card-img">
+        <img src="images/04-Trends-ML-Models.png" alt="Personal ML Model">
+      </div>
+      <div class="feature-card-body">
+        <h3>Personal ML Model</h3>
+        <p>A neural network that trains on your iPhone and adapts to your unique physiology. It learns what "normal" means for you.</p>
+      </div>
+    </div>
+    <div class="feature-card reveal">
+      <div class="feature-card-img">
+        <img src="images/03-Wellness-Monitor.png" alt="Wellness Monitor">
+      </div>
+      <div class="feature-card-body">
+        <h3>Wellness Monitor</h3>
+        <p>4-layer anomaly detection watches your vitals around the clock and flags unusual patterns before you feel them.</p>
+      </div>
+    </div>
+    <div class="feature-card reveal">
+      <div class="feature-card-img">
+        <img src="images/05-Health-Diary.png" alt="Health Diary">
+      </div>
+      <div class="feature-card-body">
+        <h3>Health Diary</h3>
+        <p>Quick daily check-ins that teach your model what your data means for your body specifically. The more you log, the smarter it gets.</p>
+      </div>
+    </div>
+    <div class="feature-card reveal">
+      <div class="feature-card-img">
+        <img src="images/06-Widget.png" alt="Widgets">
+      </div>
+      <div class="feature-card-body">
+        <h3>Home Screen Widgets</h3>
+        <p>Recovery, sleep, stress, and energy scores — always visible on your Home Screen without opening the app.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- HOW IT WORKS -->
+<section id="how">
+  <div class="section-header reveal">
+    <h2>How it works</h2>
+    <p>Three steps. No setup. No extra hardware.</p>
+  </div>
+  <div class="how-section">
+    <div class="steps">
+      <div class="step reveal">
+        <div class="step-num">1</div>
+        <h3>Wear your Apple Watch</h3>
+        <p>harmoniQ reads your vitals from HealthKit automatically. Heart rate, HRV, sleep stages, respiratory rate, and 20+ data types.</p>
+      </div>
+      <div class="step reveal">
+        <div class="step-num">2</div>
+        <h3>Rate how you feel</h3>
+        <p>Quick daily check-ins teach the model what your numbers mean for your body specifically. Not averages — you.</p>
+      </div>
+      <div class="step reveal">
+        <div class="step-num">3</div>
+        <h3>Your AI gets smarter</h3>
+        <p>A personal neural network fine-tunes on your iPhone using Apple's CoreML. Predictions improve every day. No cloud needed.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PRIVACY -->
+<section class="privacy" id="privacy">
+  <h2 class="reveal">Your data never leaves<br>your device. Ever.</h2>
+  <p class="reveal">Other health apps upload every heartbeat to their servers. harmoniQ processes everything on your iPhone using Apple's CoreML. We couldn't see your data even if we wanted to.</p>
+  <div class="privacy-cards">
+    <div class="privacy-card reveal">
+      <div class="privacy-icon">
+        <svg width="24" height="24" fill="none" stroke="#5B7FFF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+      </div>
+      <h4>On-Device ML</h4>
+      <p>Your model trains locally on your iPhone using Apple's CoreML and MLUpdateTask. No server ever sees your vitals.</p>
+    </div>
+    <div class="privacy-card reveal">
+      <div class="privacy-icon">
+        <svg width="24" height="24" fill="none" stroke="#5B7FFF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+      </div>
+      <h4>Differential Privacy</h4>
+      <p>Federated learning sends only mathematically scrambled model weights with Laplace noise. Not data — just math.</p>
+    </div>
+    <div class="privacy-card reveal">
+      <div class="privacy-icon">
+        <svg width="24" height="24" fill="none" stroke="#5B7FFF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="2" width="14" height="20" rx="2" ry="2"/><line x1="12" y1="18" x2="12.01" y2="18"/></svg>
+      </div>
+      <h4>Zero Cloud Uploads</h4>
+      <p>No health data ever touches a server. Not ours. Not anyone's. Your phone is the only computer that sees your vitals.</p>
+    </div>
+  </div>
+</section>
+
+<!-- FEDERATED -->
+<section class="federated">
+  <h2 class="reveal">Smarter together.<br>Private always.</h2>
+  <p class="reveal">Federated learning improves the model across all users — without sharing a single data point.</p>
+  <div class="flow reveal">
+    <div class="flow-node">Your iPhone</div>
+    <div class="flow-arrow">&rarr;</div>
+    <div class="flow-node hl">Noised Weights Only</div>
+    <div class="flow-arrow">&rarr;</div>
+    <div class="flow-node">Aggregation Server</div>
+    <div class="flow-arrow">&rarr;</div>
+    <div class="flow-node hl">Improved Global Model</div>
+    <div class="flow-arrow">&rarr;</div>
+    <div class="flow-node">Back to You</div>
+  </div>
+</section>
+
+<!-- FINAL CTA -->
+<section class="final-cta">
+  <h2 class="reveal">Your Apple Watch is<br>smarter than you think.</h2>
+  <p class="reveal">Free on the App Store. No subscriptions. No ads. No catch.</p>
+  <a href="https://apps.apple.com/us/app/harmoniq-health-monitor/id6761321112" class="btn-primary btn-appstore reveal">
+    <svg viewBox="0 0 24 24" fill="currentColor"><path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.8-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/></svg>
+    Download harmoniQ
+  </a>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-left">&copy; 2026 harmoniQ. For wellness purposes only — not a medical diagnosis.</div>
+  <div class="footer-links">
+    <a href="privacy.html">Privacy Policy</a>
+    <a href="terms.html">Terms of Service</a>
+    <a href="#">LinkedIn</a>
+    <a href="#">Twitter</a>
+  </div>
+</footer>
+
+<!-- SCROLL REVEAL -->
+<script>
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+      }
+    });
+  }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+
+  document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+</script>
+
+</body>
+</html>

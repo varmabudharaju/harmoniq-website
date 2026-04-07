@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>harmoniQ - Privacy Policy</title>
+    <style>
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; max-width: 700px; margin: 0 auto; padding: 24px; background: #f8f8f8; color: #1c1c1e; line-height: 1.6; }
+        h1 { font-size: 28px; margin-bottom: 4px; }
+        h2 { font-size: 18px; margin-top: 32px; color: #1a3bd4; }
+        p, li { font-size: 15px; color: #48484a; }
+        ul { padding-left: 20px; }
+        .updated { font-size: 13px; color: #8e8e93; margin-bottom: 32px; }
+        .contact { background: #e8e4df; padding: 16px; border-radius: 12px; margin-top: 32px; }
+    </style>
+</head>
+<body>
+    <h1>Privacy Policy</h1>
+    <p class="updated">Last updated: March 28, 2026</p>
+
+    <h2>Data Storage</h2>
+    <p>All health data collected by harmoniQ stays on your device. Your wellness scores, vital signs, and sleep data are computed entirely on your iPhone and are never uploaded to any server. The only optional external communication is federated learning (see below), which sends only anonymized model updates — never your health data.</p>
+
+    <h2>What We Collect</h2>
+    <p>harmoniQ reads the following data from Apple Health (with your permission):</p>
+    <ul>
+        <li>Heart rate and resting heart rate</li>
+        <li>Heart rate variability (HRV)</li>
+        <li>Sleep analysis (duration, efficiency, stages)</li>
+        <li>Wrist temperature</li>
+        <li>Respiratory rate</li>
+        <li>Step count and active energy</li>
+        <li>VO2 Max</li>
+        <li>Blood oxygen (SpO2)</li>
+        <li>Electrocardiogram (ECG) recordings</li>
+    </ul>
+    <p>This data is used solely to calculate your personalized wellness scores and is never transmitted externally.</p>
+
+    <h2>Authentication</h2>
+    <p>We use Supabase for user authentication only. The only personal information stored on our servers is your email address, used for account sign-in. No health data is ever sent to Supabase or any other service.</p>
+
+    <h2>Federated Learning (Opt-In)</h2>
+    <p>If you enable "Contribute to Global Model" in Settings, harmoniQ sends anonymized, noise-protected model weight updates to our server to improve wellness detection for all users. These updates contain no personal health data — only mathematical model adjustments with differential privacy noise applied (Laplace mechanism, epsilon = 1.0). You can opt out at any time. No data is shared when this setting is off.</p>
+
+    <h2>On-Device Machine Learning</h2>
+    <p>harmoniQ trains a personal machine learning model entirely on your device using Apple's Core ML framework. This model learns from your daily wellness ratings and overnight vital signs to predict how you will feel. The model and all training data remain on your device and are never uploaded.</p>
+
+    <h2>No Third-Party Sharing</h2>
+    <p>We do not share, sell, or provide your data to any third parties. There is no advertising, analytics tracking, or data mining in harmoniQ.</p>
+
+    <h2>Data Deletion</h2>
+    <p>You can delete your account and all associated data at any time from Settings. This will remove your authentication account and clear all locally stored wellness data, ML models, and labels.</p>
+
+    <h2>Children's Privacy</h2>
+    <p>harmoniQ is not intended for use by children under 17. We do not knowingly collect personal information from children.</p>
+
+    <div class="contact">
+        <h2 style="margin-top: 0;">Contact</h2>
+        <p>If you have questions about our privacy practices, please contact us at <a href="mailto:support@harmoniq.app">support@harmoniq.app</a></p>
+    </div>
+</body>
+</html>
